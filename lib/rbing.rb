@@ -1,5 +1,6 @@
 require "httparty"
 require "yaml"
+require "json"
 #
 # Usage:
 # 
@@ -80,7 +81,7 @@ class RBing
   attr_accessor :instance_options
   
   base_uri "http://api.search.live.net/json.aspx"
-  format :json
+  format :plain
   
   BASE_OPTIONS = [:version, :market, :adult, :query, :appid, :sources]
   
@@ -110,7 +111,7 @@ class RBing
   # issues a search for +query+ in +source+
   #
   def search(source, query, options={})
-    rsp = self.class.get('', options_for(source, query, options))
+    rsp = JSON.parse(self.class.get('', options_for(source, query, options)))
     ResponseData.new(rsp['SearchResponse']) if rsp
   end
   
